@@ -1,185 +1,126 @@
+# 🔥 FireOps — SIEM & Intrusion Detection Lab (Wazuh + Suricata)
 
-# 🔥 FireOps — SIEM & Intrusion Detection Lab
-
-**Team B | Cybersecurity Internship Project**  
-**Focus Area:** Network Security Monitoring & Attack Detection  
-**Date:** February 21, 2026
+**Team:** Team B · **Program:** Cybersecurity Internship Project
+**Focus Area:** Network Security Monitoring & Attack Detection · **Date:** February 2026
 
 ---
 
-## Abstract
+## 📌 Abstract
 
-This project presents the deployment and configuration of a Security Information and Event Management (SIEM) system using **Wazuh** integrated with **Suricata IDS**. The objective was to build a functional security monitoring lab capable of:
-
-- Detecting brute force attacks
-- Monitoring file integrity changes
-- Analyzing security events in real time
-
-The lab environment was implemented using virtual machines in a controlled setting.
+This project presents the deployment and configuration of a Security Information and Event Management (SIEM) system using **Wazuh** integrated with the **Suricata** Intrusion Detection System (IDS). The goal was to build a functional security monitoring lab capable of detecting brute force attacks, monitoring file integrity changes, and analyzing security events in real time — implemented entirely in a controlled virtual machine environment.
 
 ---
 
-## Table of Contents
-
-1. [Introduction](#1-introduction)
-2. [Project Objectives](#2-project-objectives)
-3. [Lab Architecture & Environment Setup](#3-lab-architecture--environment-setup)
-4. [Tools and Technologies Used](#4-tools-and-technologies-used)
-5. [Installation and Configuration](#5-installation-and-configuration)
-6. [Azure Activity — VM Deallocation](#6-azure-activity--vm-deallocation)
-7. [Suricata Integration with Wazuh](#7-suricata-integration-with-wazuh)
-8. [Brute Force Attack Simulation](#8-brute-force-attack-simulation)
-9. [Alert Monitoring and Log Analysis](#9-alert-monitoring-and-log-analysis)
-10. [Security Findings](#10-security-findings)
-11. [Challenges Encountered](#11-challenges-encountered)
-12. [Lessons Learned](#12-lessons-learned)
-13. [Conclusion](#13-conclusion)
-
----
-
-## 1. Introduction
-
-This project demonstrates the practical implementation of a SIEM system for detecting and analyzing cyber threats within a virtual lab environment. The focus was on real-time log monitoring, intrusion detection, and attack simulation.
-
----
-
-## 2. Project Objectives
+## 🎯 Project Objectives
 
 - Deploy and configure **Wazuh SIEM**
 - Install and integrate **Suricata IDS**
 - Enable **File Integrity Monitoring (FIM)**
-- Simulate brute force attacks using **Kali Linux**
-- Analyze generated alerts in the **Wazuh dashboard**
+- Simulate **brute force attacks** using Kali Linux
+- Analyze generated alerts in the Wazuh dashboard
 
 ---
 
-## 3. Lab Architecture & Environment Setup
+## 🏗️ Lab Architecture & Environment Setup
 
-The lab environment consisted of multiple virtual machines:
+The lab environment consisted of four virtual machines:
 
-| Role | OS |
-|------|----|
-| Wazuh Manager | Ubuntu Server |
-| Ubuntu Agent | Ubuntu |
-| Target Machine | Windows 10 |
-| Attacker Machine | Kali Linux |
+- **Wazuh Manager** — central SIEM server
+- **Ubuntu Agent** — monitored Linux endpoint
+- **Windows 10 Target Machine** — brute-force attack target
+- **Kali Linux Attacker Machine** — used to simulate attacks
 
----
-
-## 4. Tools and Technologies Used
-
-| Tool | Purpose |
-|------|---------|
-| VirtualBox | Virtualization platform |
-| Wazuh SIEM | Log management & alerting |
-| Suricata IDS | Network intrusion detection |
-| Kali Linux | Attack simulation |
-| Ubuntu Server | Agent & manager hosting |
-| Windows 10 | Target endpoint |
+![Lab Architecture](media/01-lab-architecture.png)
+![Wazuh Dashboard — Agent Active](media/02-wazuh-dashboard-agent-active.jpeg)
 
 ---
 
-## 5. Installation and Configuration
+## 🧰 Tools & Technologies
 
-### Install Wazuh
+`VirtualBox` · `Wazuh SIEM` · `Suricata IDS` · `Kali Linux` · `Ubuntu Server` · `Windows 10`
 
+---
+
+## ⚙️ Installation & Configuration
+
+**Wazuh Manager install:**
 ```bash
 curl -sO https://packages.wazuh.com && sudo bash ./wazuh-install.sh -a
 ```
 
-### Install Suricata (Ubuntu/Debian)
+![Wazuh Install](media/03-wazuh-install.png)
 
+**Suricata install (Ubuntu/Debian):**
 ```bash
-sudo add-apt-repository ppa:oisf/suricata-stable
-sudo apt update && sudo apt install suricata -y
+sudo add-apt-repository ppa:oisf/suricata-stable && sudo apt update && sudo apt install suricata -y
 ```
 
-### Install Wazuh Agent
-
+**Wazuh Agent install & startup:**
 ```bash
 WAZUH_MANAGER="10.0.2.5" apt-get install wazuh-agent
-
-sudo systemctl daemon-reload
-sudo systemctl enable wazuh-agent
-sudo systemctl start wazuh-agent
+sudo systemctl daemon-reload && sudo systemctl enable wazuh-agent && sudo systemctl start wazuh-agent
 ```
 
 ---
 
-## 6. Azure Activity — VM Deallocation
+## ☁️ Azure VM Deallocation Activity
 
-Azure Activity Logs were reviewed to monitor VM deallocation events. These logs provided insight into infrastructure-level changes that could correlate with security incidents.
+Azure activity logs were reviewed to trace what triggered VM deallocation events during the lab.
 
----
-
-## 7. Suricata Integration with Wazuh
-
-Suricata was configured to generate logs in **JSON format (`eve.json`)**, which were integrated into Wazuh for centralized monitoring and alert generation.
-
-Key configuration steps:
-- Set Suricata output to `eve.json`
-- Point Wazuh to read the Suricata log file
-- Verify alert forwarding in the Wazuh dashboard
+![Azure Activity Logs](media/04-azure-activity-logs.jpeg)
+![What Triggered the Logs](media/05-azure-log-trigger.jpeg)
 
 ---
 
-## 8. Brute Force Attack Simulation
+## 🔗 Suricata Integration with Wazuh
 
-A brute force attack was simulated from **Kali Linux** targeting the victim machine. The objective was to trigger authentication failure alerts in Wazuh and verify end-to-end detection.
+Suricata was configured to generate logs in JSON format (`eve.json`), which were integrated into Wazuh for centralized monitoring and alert generation.
 
----
-
-## 9. Alert Monitoring and Log Analysis
-
-Security alerts were analyzed based on severity levels:
-
-| Level | Description |
-|-------|-------------|
-| 🔴 Critical | Immediate threat requiring action |
-| 🟠 High | Significant suspicious activity |
-| 🟡 Medium | Moderate risk indicators |
-| 🟢 Low | Informational events |
-
-Logs were reviewed to identify attack patterns and suspicious behavior across all monitored endpoints.
+![Suricata–Wazuh Integration](media/06-suricata-wazuh-integration.png)
 
 ---
 
-## 10. Security Findings
+## 💥 Brute Force Attack Simulation
+
+A brute force attack was simulated from the Kali Linux attacker machine, targeting the Windows 10 victim machine, with the objective of triggering authentication failure alerts in Wazuh.
+
+---
+
+## 📊 Alert Monitoring & Log Analysis
+
+Security alerts were analyzed by severity level (Critical, High, Medium, Low), with logs reviewed to identify attack patterns and suspicious behavior.
+
+---
+
+## 🔎 Security Findings
 
 The SIEM system successfully detected:
+- Brute force authentication attempts
+- File integrity violations
+- Suspicious network traffic patterns
 
-- ✅ Brute force login attempts
-- ✅ File integrity violations
-- ✅ Suspicious network traffic patterns (via Suricata)
-
----
-
-## 11. Challenges Encountered
-
-- Suricata logs not appearing in the dashboard (resolved via JSON config fix)
-- Agent disconnection troubleshooting
-- JSON log configuration errors
+![Alert Cause Analysis](media/07-alert-cause.jpeg)
+![Brute Force Log — Windows](media/08-bruteforce-log-windows.jpeg)
+![Suricata Alert — Ubuntu](media/09-suricata-alert-ubuntu.jpeg)
 
 ---
 
-## 12. Lessons Learned
+## ⚠️ Challenges Encountered
 
-This project enhanced practical knowledge in:
-
-- SIEM deployment and configuration
-- IDS (Suricata) setup and integration
-- Log analysis and correlation
-- Incident detection techniques
-- Virtual lab environment management
+- Suricata logs not initially appearing in the Wazuh dashboard
+- Agent disconnection required troubleshooting
+- JSON log configuration errors — resolved through reconfiguration
 
 ---
 
-## 13. Conclusion
+## 📚 Lessons Learned
 
-The successful deployment of **Wazuh** and **Suricata** demonstrates the effectiveness of SIEM solutions in monitoring, detecting, and analyzing cybersecurity threats in real time. This lab serves as a foundation for building more advanced security operations capabilities.
+This project strengthened practical skills in SIEM deployment, IDS configuration, log analysis, and incident detection techniques across a multi-VM lab environment.
 
 ---
 
-## Team
+## ✅ Conclusion
 
-**Team B** — Cybersecurity Internship, 2026
+The successful deployment of Wazuh and Suricata demonstrates the effectiveness of SIEM solutions in monitoring, detecting, and analyzing cybersecurity threats in real time — from brute force detection through to network intrusion alerting.
+
+*Team B — Cybersecurity Internship Project — February 2026*
