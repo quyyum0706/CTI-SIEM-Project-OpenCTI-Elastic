@@ -123,4 +123,4 @@ This project strengthened practical skills in SIEM deployment, IDS configuration
 
 The successful deployment of Wazuh and Suricata demonstrates the effectiveness of SIEM solutions in monitoring, detecting, and analyzing cybersecurity threats in real time — from brute force detection through to network intrusion alerting.
 
-*Team B — Cybersecurity Internship Project — February 2026*
+*Team B — Cybersecurity Project — February 2026*
